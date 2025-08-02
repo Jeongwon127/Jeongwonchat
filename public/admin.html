@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정원스튜디오 채팅 - 관리자</title>
+    <link rel="stylesheet" href="admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 어드민 로그인 화면 -->
+    <div id="adminLoginScreen" class="screen active">
+        <div class="login-container">
+            <div class="login-header">
+                <h1><i class="fas fa-shield-alt"></i> 관리자 로그인</h1>
+                <p>정원스튜디오 채팅 관리자 페이지</p>
+            </div>
+            
+            <form class="login-form" id="adminLoginForm">
+                <div class="input-group">
+                    <label for="adminId">아이디</label>
+                    <input type="text" id="adminId" placeholder="관리자 아이디를 입력하세요" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="adminPassword">비밀번호</label>
+                    <input type="password" id="adminPassword" placeholder="관리자 비밀번호를 입력하세요" required>
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    어드민 로그인
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 어드민 대시보드 -->
+    <div id="adminDashboard" class="screen">
+        <div class="admin-container">
+            <!-- 왼쪽 패널 (25%) - 시스템 관리 -->
+            <div class="left-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-cogs"></i> 시스템 관리</h3>
+                </div>
+                
+                <div class="panel-content">
+                    <!-- 안내 메시지 -->
+                    <div class="section">
+                        <h4><i class="fas fa-bullhorn"></i> 안내 메시지</h4>
+                        <div class="message-list" id="systemMessages">
+                            <!-- 시스템 메시지들이 여기에 표시됩니다 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 팝업 모달 -->
+                    <div class="section">
+                        <h4><i class="fas fa-window-maximize"></i> 팝업 모달</h4>
+                        <div class="form-group">
+                            <label>HTML 내용:</label>
+                            <textarea id="popupHtml" placeholder="HTML 내용을 입력하세요" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>대상:</label>
+                            <select id="popupTarget">
+                                <option value="all">모든 유저</option>
+                                <option value="specific">특정 유저</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="specificUserGroup" style="display: none;">
+                            <label>유저 닉네임:</label>
+                            <input type="text" id="specificUser" placeholder="닉네임을 입력하세요">
+                        </div>
+                        <button id="sendPopup" class="action-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            팝업 전송
+                        </button>
+                    </div>
+                    
+                    <!-- 유저 밴 -->
+                    <div class="section">
+                        <h4><i class="fas fa-ban"></i> 유저 밴</h4>
+                        <div class="form-group">
+                            <label>밴할 유저 닉네임:</label>
+                            <input type="text" id="banUsername" placeholder="닉네임을 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            <label>밴 메시지:</label>
+                            <textarea id="banMessage" placeholder="밴 메시지를 입력하세요" rows="3"></textarea>
+                        </div>
+                        <button id="banUser" class="action-btn danger">
+                            <i class="fas fa-user-slash"></i>
+                            유저 밴
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 중앙 패널 (50%) - 회원 관리 -->
+            <div class="center-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-users"></i> 회원 관리</h3>
+                </div>
+                
+                <div class="panel-content">
+                    <!-- 밴 관리 -->
+                    <div class="section">
+                        <h4><i class="fas fa-user-lock"></i> 밴 관리</h4>
+                        <div class="banned-users" id="bannedUsers">
+                            <!-- 밴된 유저 목록 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 경고/시간 밴 -->
+                    <div class="section">
+                        <h4><i class="fas fa-exclamation-triangle"></i> 경고/시간 밴</h4>
+                        <div class="form-group">
+                            <label>대상 유저:</label>
+                            <select id="warningTarget">
+                                <option value="">유저를 선택하세요</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>경고 메시지:</label>
+                            <textarea id="warningMessage" placeholder="경고 메시지를 입력하세요" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>시간 밴 (초):</label>
+                            <input type="number" id="timeBanSeconds" placeholder="0" min="0">
+                        </div>
+                        <div class="button-group">
+                            <button id="sendWarning" class="action-btn warning">
+                                <i class="fas fa-exclamation"></i>
+                                경고 전송
+                            </button>
+                            <button id="timeBan" class="action-btn danger">
+                                <i class="fas fa-clock"></i>
+                                시간 밴
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 회원 목록 -->
+                    <div class="section">
+                        <h4><i class="fas fa-list"></i> 회원 목록</h4>
+                        <div class="table-container">
+                            <table class="user-table">
+                                <thead>
+                                    <tr>
+                                        <th>순번</th>
+                                        <th>ID</th>
+                                        <th>닉네임</th>
+                                        <th>이메일</th>
+                                        <th>상태</th>
+                                        <th>작업</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userTableBody">
+                                    <!-- 유저 목록이 여기에 표시됩니다 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 오른쪽 패널 (25%) - 채팅 관리 -->
+            <div class="right-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-comments"></i> 채팅 관리</h3>
+                </div>
+                
+                <div class="panel-content">
+                    <div class="chat-list" id="chatList">
+                        <!-- 채팅 목록이 여기에 표시됩니다 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 유저 안내 모달 -->
+    <div id="userNoticeModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-bell"></i> 유저 안내</h3>
+                <button class="close-btn" onclick="closeModal('userNoticeModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>안내 메시지:</label>
+                    <textarea id="userNoticeMessage" placeholder="안내 메시지를 입력하세요" rows="4"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="sendUserNotice" class="action-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    안내 전송
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html> 

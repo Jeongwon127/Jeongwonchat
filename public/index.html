@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정원스튜디오 채팅</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 로그인 화면 -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="logo-section">
+                    <img src="/logos/정원스튜디오_CI_2025-블랙기본형.png" alt="정원스튜디오" class="login-logo">
+                </div>
+                <h1>정원스튜디오 채팅</h1>
+                <p>실시간 채팅으로 소통하세요</p>
+            </div>
+            
+            <form class="login-form">
+                <div class="input-group">
+                    <label for="username">사용자 이름</label>
+                    <div class="username-input-container">
+                        <input type="text" id="username" placeholder="사용자 이름을 입력하세요" maxlength="20">
+                        <button type="button" id="checkUsernameBtn" class="check-btn">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                    <div id="usernameResult" class="result-message"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="agreeTerms" required>
+                        <span class="checkmark"></span>
+                        <span class="checkbox-text">개인정보 처리방침 및 이용약관에 동의합니다.</span>
+                    </label>
+                </div>
+                
+                <div class="input-group">
+                    <label for="email">이메일</label>
+                    <input type="email" id="email" placeholder="이메일을 입력하세요" required>
+                </div>
+                
+                <button type="button" id="loginBtn" class="login-btn" disabled>
+                    <i class="fas fa-sign-in-alt"></i>
+                    채팅방 입장
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 채팅 화면 -->
+    <div id="chatScreen" class="screen">
+        <div class="chat-container">
+            <!-- 사이드바 -->
+            <div id="sidebar" class="sidebar">
+                <div class="sidebar-header">
+                    <div class="logo-section">
+                        <img id="sidebarLogo" src="/logos/정원스튜디오_CI_2025-블랙기본형.png" alt="로고" class="sidebar-logo">
+                    </div>
+                    <div class="header-controls">
+                        <button id="darkModeToggle" class="control-btn">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <button id="sidebarToggle" class="control-btn">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="sidebar-content">
+                    <div class="time-section">
+                        <i class="fas fa-clock"></i>
+                        <span id="currentTime">8.2(토) 오전 9:42</span>
+                    </div>
+                    
+                    <h3 class="room-title">오픈채팅방</h3>
+                    
+                    <div class="info-cards">
+                        <div class="info-card">
+                            <div class="card-icon">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <div class="card-content">
+                                <strong>공지</strong>
+                                <span>환영합니다! 오픈채팅방에 오신것을 축하드립니다.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="card-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="card-content">
+                                <strong>사용자</strong>
+                                <span id="currentUsername">내 사용자이름</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card weather-card">
+                            <div class="card-icon">
+                                <img id="weatherIcon" src="https://openweathermap.org/img/wn/01d@2x.png" alt="날씨">
+                            </div>
+                            <div class="card-content">
+                                <span id="cityName">서울</span>
+                                <div class="weather-info">
+                                    <span id="temperature">20°C</span>
+                                    <span id="weatherDesc">맑음</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-footer">
+                    <div class="user-email">
+                        <i class="fas fa-envelope"></i>
+                        <span id="userEmailDisplay">user@example.com</span>
+                    </div>
+                    <div class="footer-buttons">
+                        <button id="settingsBtn" class="footer-btn">
+                            <i class="fas fa-cog"></i>
+                            <span>설정</span>
+                        </button>
+                        <button id="logoutBtn" class="footer-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>로그아웃</span>
+                        </button>
+                        <button id="shareBtn" class="footer-btn">
+                            <i class="fas fa-share-alt"></i>
+                            <span>공유</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 메인 채팅 영역 -->
+            <div class="chat-main">
+                <div class="chat-header">
+                    <button id="mobileSidebarToggle" class="mobile-sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>오픈채팅방</h2>
+                    <div class="chat-header-controls">
+                        <button id="mobileDarkModeToggle" class="control-btn">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <!-- 메시지들이 여기에 동적으로 추가됩니다 -->
+                </div>
+                
+                <div class="chat-input-container">
+                    <button id="attachBtn" class="attach-btn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="input-wrapper">
+                        <input type="text" id="messageInput" placeholder="메시지를 입력하세요..." maxlength="500">
+                        <button id="imageBtn" class="image-btn">
+                            <i class="fas fa-image"></i>
+                        </button>
+                    </div>
+                    <button id="sendBtn" class="send-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                
+                <!-- 파일 첨부 메뉴 -->
+                <div id="attachMenu" class="attach-menu hidden">
+                    <div class="attach-option" id="voiceRecord">
+                        <i class="fas fa-microphone"></i>
+                        <span>음성입력</span>
+                    </div>
+                    <div class="attach-option" id="fileShare">
+                        <i class="fas fa-file"></i>
+                        <span>파일공유</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 설정 모달 -->
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-cog"></i> 설정</h3>
+                <button id="closeSettings" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-section">
+                    <h4><i class="fas fa-language"></i> 언어</h4>
+                    <select id="languageSelect" class="setting-select">
+                        <option value="ko">한국어</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                
+                <div class="setting-section">
+                    <h4><i class="fas fa-database"></i> 데이터 제어</h4>
+                    <div class="setting-item">
+                        <label class="setting-checkbox">
+                            <input type="checkbox" id="dataExport" checked>
+                            <span class="checkmark"></span>
+                            데이터 내보내기 (JSON 형식)
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label>알림 설정:</label>
+                        <select id="notificationType" class="setting-select">
+                            <option value="push">푸시 알림</option>
+                            <option value="sound">소리 알림</option>
+                            <option value="none">알림 없음</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-checkbox">
+                            <input type="checkbox" id="saveProfile" checked>
+                            <span class="checkmark"></span>
+                            프로필 정보 저장
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="setting-section">
+                    <h4><i class="fas fa-user-circle"></i> 프로필 사진</h4>
+                    <div class="profile-image-section">
+                        <img id="currentProfileImage" src="/logos/정원스튜디오_CI_2025-블랙기본형.png" alt="프로필">
+                        <input type="file" id="profileImageInput" accept="image/*">
+                        <button id="changeProfileBtn" class="profile-btn">
+                            <i class="fas fa-camera"></i>
+                            프로필 사진 변경
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveSettings" class="save-btn">
+                    <i class="fas fa-save"></i>
+                    저장
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 파일 업로드 모달 -->
+    <div id="fileModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-upload"></i> 파일 공유</h3>
+                <button id="closeFileModal" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="file-upload-area">
+                    <input type="file" id="fileInput" accept="*/*">
+                    <div class="upload-placeholder">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>파일을 선택하거나 여기에 드래그하세요</p>
+                    </div>
+                </div>
+                <div class="file-info">
+                    <p><i class="fas fa-info-circle"></i> 최대 파일 크기: 100MB</p>
+                    <p><i class="fas fa-check-circle"></i> 지원 형식: 모든 파일</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="uploadFile" class="upload-btn">
+                    <i class="fas fa-upload"></i>
+                    업로드
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 음성 녹음 모달 -->
+    <div id="voiceModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-microphone"></i> 음성 녹음</h3>
+                <button id="closeVoiceModal" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="voice-recorder">
+                    <div class="recording-status">
+                        <i id="recordIcon" class="fas fa-microphone"></i>
+                        <span id="recordingTime">00:00</span>
+                    </div>
+                    <div class="record-buttons">
+                        <button id="startRecord" class="record-btn">
+                            <i class="fas fa-play"></i>
+                            녹음 시작
+                        </button>
+                        <button id="stopRecord" class="record-btn hidden">
+                            <i class="fas fa-stop"></i>
+                            녹음 중지
+                        </button>
+                    </div>
+                </div>
+                <div class="voice-info">
+                    <p><i class="fas fa-clock"></i> 최대 녹음 시간: 10초</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
